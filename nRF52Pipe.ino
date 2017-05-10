@@ -1,4 +1,4 @@
-/*  OpenPipe Breakout with BLE MIDI for nRF52 based boards.
+/*  OpenPipe Breakout with BLE MIDI for Adafruit and SparkFun nRF52 boards.
  *  
  *  Connect OpenPipe Breakout to Adafruit Bluefruit nRF52 Feather:
  *  
