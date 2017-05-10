@@ -1,20 +1,27 @@
-/*  OpenPipe Breakout with BLE MIDI
- *
- *  Connect the OpenPipe Breakout to SparkFun nRF52 Breakout:
+/*  OpenPipe Breakout with BLE MIDI for nRF52 based boards.
  *  
- *  RED -> VCC
- *  BLACK -> GND
+ *  Connect OpenPipe Breakout to Adafruit Bluefruit nRF52 Feather:
+ *  
+ *  RED -> 27
+ *  BLACK -> 30
+ *  WHITE-> 25 (SDA)
+ *  GREEN-> 26 (SCL)
+ *  
+ *  NOTE: SDA and SCL require external pull-up resistors (4k7)
+ *  
+ *  Connect OpenPipe Breakout to SparkFun nRF52 Breakout:
+ *  
+ *  RED -> 22
+ *  BLACK -> 23
  *  WHITE-> 24 (SDA)
  *  GREEN-> 25 (SCL)
  *  
- *  Note: SDA and SCL redefined in variants.h
+ *  NOTE: SDA and SCL must be redefined in SparkFun variants.h
  *  
  *  www.openpipe.cc
  */
 
-#include <Wire.h> // required by OpenPipe
 #include <OpenPipe.h>
-#include <SPI.h> // required by BLEPeripheral
 #include <BLEPeripheral.h>
 
 // Select fingering here
@@ -31,8 +38,27 @@
 #define NOTEOFF 0x80
 #define NOTEON 0x90
 
+#if defined(ARDUINO_FEATHER52)
+
+#define VCC_PIN 27
+#define GND_PIN 30
+
+// Blue LED
+#define LED_PIN LED_BLUE
+#define LED_ACTIVE LED_STATE_ON
+
+#elif defined(ARDUINO_NRF52_DK)
+
+#define VCC_PIN 22
+#define GND_PIN 23
+
+// LED on pin 7 is active low
 #define LED_PIN 7
 #define LED_ACTIVE LOW
+
+#else
+#error "Unsupported platform." 
+#endif
 
 #define BLE_PACKET_SIZE 20
 
@@ -75,11 +101,11 @@ void loop() {
 }
 
 //void testNotes() {
-//  noteOn(CHANNEL, 60, 127);
-//  midiChar.setValue(midiData, 5);
+//  loadNoteOn(CHANNEL, 60, 127);
+//  sendMessages();
 //  delay(200);
-//  noteOff(CHANNEL, 60);
-//  midiChar.setValue(midiData, 5);
+//  loadNoteOff(CHANNEL, 60);
+//  sendMessages();
 //  delay(400);
 //}
 
@@ -118,7 +144,7 @@ void displayConnectionState() {
 }
 
 void setupOpenPipe() {
-  //OpenPipe.power(A2, A3);
+  OpenPipe.power(VCC_PIN, GND_PIN);
   OpenPipe.config();
   OpenPipe.setFingering(FINGERING);
 }
