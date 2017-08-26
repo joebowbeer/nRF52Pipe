@@ -18,6 +18,8 @@
  *  
  *  NOTE: SDA and SCL must be redefined in SparkFun variants.h
  *  
+ *  If attaching OpenPipe with a long cable, connect RED to 3V3 pin.
+ *  
  *  www.openpipe.cc
  */
 
